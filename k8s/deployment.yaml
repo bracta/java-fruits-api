@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-fruits-api
+  labels:
+    app: java-fruits-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-fruits-api
+  template:
+    metadata:
+      labels:
+        app: java-fruits-api
+    spec:
+      containers:
+        - name: java-fruits-api
+          image: adambracey/java-fruits-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: QUARKUS_PROFILE
+              value: prod
