@@ -14,7 +14,7 @@ spec:
         app: java-fruits-api
     spec:
       containers:
-      - image: <+artifact.image>
+      - image: {{.Values.image}}
         name: java-fruits-api
         ports:
         - containerPort: 8080
