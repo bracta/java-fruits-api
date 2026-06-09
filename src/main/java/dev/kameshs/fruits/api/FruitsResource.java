@@ -31,6 +31,15 @@ public class FruitsResource {
     return Fruit.listAll(Sort.ascending("name,season"));
   }
 
+  // Deliberate fault injection: returns HTTP 500 on demand so Prometheus records a
+  // SERVER_ERROR data point (drives the Continuous Verification error-rate metric demo).
+  @GET
+  @Path("/error")
+  public Fruit error() {
+    throw new javax.ws.rs.InternalServerErrorException(
+        "Simulated server error for CV error-rate demo");
+  }
+
   @GET
   @Path("/season/{season}")
   public List<Fruit> fruitsBySeason(@PathParam("season") String season) {
