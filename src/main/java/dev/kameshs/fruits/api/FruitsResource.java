@@ -19,6 +19,11 @@ public class FruitsResource {
   @ConfigProperty(name = "my.fruit")
   String defaultFruit;
 
+  // When true (set by the %errorrate profile), the list endpoint returns HTTP 500 on
+  // normal traffic — the pod stays READY, so the canary serves 5xx and CV detects the spike.
+  @ConfigProperty(name = "app.fail-list", defaultValue = "false")
+  boolean failList;
+
   @GET
   @Path("/default")
   public Fruit defaultFruit() {
@@ -28,6 +33,10 @@ public class FruitsResource {
   @GET
   @Path("/")
   public List<Fruit> fruits() {
+    if (failList) {
+      throw new javax.ws.rs.InternalServerErrorException(
+          "Simulated server error on list (CV error-rate regression)");
+    }
     return Fruit.listAll(Sort.ascending("name,season"));
   }
 
