@@ -12,6 +12,10 @@ spec:
     metadata:
       labels:
         app: java-fruits-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/q/metrics"
+        prometheus.io/port: "8080"
     spec:
       containers:
       - image: {{.Values.image}}
